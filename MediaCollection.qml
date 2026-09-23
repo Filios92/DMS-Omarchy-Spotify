@@ -1,7 +1,7 @@
 import QtQuick
-import QtQuick.Controls
-import qs.Commons
-import qs.Ui
+import QtQuick.Controls as QQC
+import "compat/Commons"
+import "compat/Ui"
 
 import "Api.js" as Api
 
@@ -377,7 +377,7 @@ Item {
       activeFocusOnTab: false
       keyNavigationEnabled: false
       highlightFollowsCurrentItem: true
-      ScrollBar.vertical: ScrollBar { }
+      QQC.ScrollBar.vertical: QQC.ScrollBar { }
       onMovementEnded: root.rememberView()
       onCountChanged: {
         root.restoreView()

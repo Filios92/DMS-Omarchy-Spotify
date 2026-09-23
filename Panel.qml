@@ -1,8 +1,8 @@
 import QtQuick
-import QtQuick.Controls
+import QtQuick.Controls as QQC
 import Quickshell
-import qs.Commons
-import qs.Ui
+import "compat/Commons"
+import "compat/Ui"
 
 import "Api.js" as Api
 
@@ -2220,7 +2220,7 @@ Item {
     }
   }
 
-  Popup {
+  QQC.Popup {
     id: shortcutHelpPopup
     parent: window.contentItem
     x: Math.max(Style.space(8), (window.width - width) / 2)
@@ -2230,7 +2230,7 @@ Item {
     padding: Style.space(12)
     modal: true
     focus: true
-    closePolicy: Popup.CloseOnEscape | Popup.CloseOnPressOutside
+    closePolicy: QQC.Popup.CloseOnEscape | QQC.Popup.CloseOnPressOutside
 
     onOpened: root.disarmEscapeClose()
     onClosed: Qt.callLater(function() { focusScope.forceActiveFocus() })
@@ -2295,15 +2295,15 @@ Item {
         foreground: root.foreground
       }
 
-      ScrollView {
+      QQC.ScrollView {
         id: shortcutHelpScroll
         width: parent.width
         height: Math.max(80, parent.height - shortcutHelpHeader.height
           - shortcutHelpSeparator.height - parent.spacing * 2)
         rightPadding: root.popupScrollbarGutter
         clip: true
-        ScrollBar.horizontal.policy: ScrollBar.AlwaysOff
-        ScrollBar.vertical.policy: ScrollBar.AsNeeded
+        QQC.ScrollBar.horizontal.policy: QQC.ScrollBar.AlwaysOff
+        QQC.ScrollBar.vertical.policy: QQC.ScrollBar.AsNeeded
 
         Column {
           id: shortcutHelpList
@@ -2370,7 +2370,7 @@ Item {
     }
   }
 
-  Popup {
+  QQC.Popup {
     id: lyricsInstallPopup
     parent: window.contentItem
     x: Math.max(Style.space(8), (window.width - width) / 2)
@@ -2381,8 +2381,8 @@ Item {
     modal: true
     focus: true
     closePolicy: root.service && root.service.lyricsPluginBusy
-      ? Popup.NoAutoClose
-      : Popup.CloseOnEscape | Popup.CloseOnPressOutside
+      ? QQC.Popup.NoAutoClose
+      : QQC.Popup.CloseOnEscape | QQC.Popup.CloseOnPressOutside
 
     onOpened: root.disarmEscapeClose()
     onClosed: {
@@ -2419,7 +2419,7 @@ Item {
     }
   }
 
-  Popup {
+  QQC.Popup {
     id: mediaContextMenu
     parent: window.contentItem
     width: Math.min(Style.space(310), window.width - Style.space(24))
@@ -2429,7 +2429,7 @@ Item {
     modal: true
     dim: false
     focus: true
-    closePolicy: Popup.CloseOnEscape | Popup.CloseOnPressOutside
+    closePolicy: QQC.Popup.CloseOnEscape | QQC.Popup.CloseOnPressOutside
     onOpened: {
       root.popupReturnRegion = root.panelCursorRegion
       root.popupReturnAction = root.panelCursorAction
@@ -2513,7 +2513,7 @@ Item {
         onActivated: root.activatePanelCursor()
       }
 
-      ScrollView {
+      QQC.ScrollView {
         id: contextMenuScroll
         anchors.fill: parent
         clip: true
@@ -2522,8 +2522,8 @@ Item {
         Keys.enabled: false
         rightPadding: contextMenuContent.implicitHeight > height
           ? root.popupScrollbarGutter : 0
-        ScrollBar.horizontal.policy: ScrollBar.AlwaysOff
-        ScrollBar.vertical.policy: ScrollBar.AsNeeded
+        QQC.ScrollBar.horizontal.policy: QQC.ScrollBar.AlwaysOff
+        QQC.ScrollBar.vertical.policy: QQC.ScrollBar.AsNeeded
 
         Column {
           id: contextMenuContent
@@ -2735,7 +2735,7 @@ Item {
     }
   }
 
-  Popup {
+  QQC.Popup {
     id: playlistPicker
     parent: window.contentItem
     x: Math.max(Style.space(8), (window.width - width) / 2)
@@ -2745,7 +2745,7 @@ Item {
     padding: Style.space(8)
     modal: true
     focus: true
-    closePolicy: Popup.CloseOnEscape | Popup.CloseOnPressOutside
+    closePolicy: QQC.Popup.CloseOnEscape | QQC.Popup.CloseOnPressOutside
 
     background: BorderSurface {
       color: root.popupBackground
@@ -2823,7 +2823,7 @@ Item {
         keyNavigationEnabled: true
         highlightFollowsCurrentItem: true
         activeFocusOnTab: true
-        ScrollBar.vertical: ScrollBar { policy: ScrollBar.AsNeeded }
+        QQC.ScrollBar.vertical: QQC.ScrollBar { policy: QQC.ScrollBar.AsNeeded }
         Keys.onReturnPressed: if (currentItem) currentItem.clicked()
         Keys.onEnterPressed: if (currentItem) currentItem.clicked()
 
@@ -2848,7 +2848,7 @@ Item {
     }
   }
 
-  Popup {
+  QQC.Popup {
     id: createPlaylistPopup
     parent: window.contentItem
     x: Math.max(Style.space(8), (window.width - width) / 2)
@@ -2858,7 +2858,7 @@ Item {
     padding: Style.space(9)
     modal: true
     focus: true
-    closePolicy: Popup.CloseOnEscape | Popup.CloseOnPressOutside
+    closePolicy: QQC.Popup.CloseOnEscape | QQC.Popup.CloseOnPressOutside
 
     onOpened: Qt.callLater(function() {
       createPlaylistNameField.selectAll()
@@ -2934,7 +2934,7 @@ Item {
     }
   }
 
-  Popup {
+  QQC.Popup {
     id: sleepPopup
     parent: window.contentItem
     x: Math.max(Style.space(8), window.width - width - Style.space(24))
@@ -2944,7 +2944,7 @@ Item {
     padding: Style.space(7)
     modal: false
     focus: true
-    closePolicy: Popup.CloseOnEscape | Popup.CloseOnPressOutside
+    closePolicy: QQC.Popup.CloseOnEscape | QQC.Popup.CloseOnPressOutside
 
     onOpened: {
       root.panelCursorActive = true
@@ -5084,7 +5084,7 @@ Item {
               reuseItems: true
               cacheBuffer: Style.space(160)
               boundsBehavior: Flickable.StopAtBounds
-              ScrollBar.vertical: ScrollBar { policy: ScrollBar.AsNeeded }
+              QQC.ScrollBar.vertical: QQC.ScrollBar { policy: QQC.ScrollBar.AsNeeded }
               onQueryKeyChanged: positionViewAtBeginning()
 
               FastScrollHandler {
@@ -5593,7 +5593,7 @@ Item {
             height: visible ? implicitHeight : 0
             showLabel: false
             foreground: root.foreground
-            background: root.background
+            surfaceColor: root.background
             accent: root.accent
             fontFamily: root.fontFamily
             placeholderText: "Choose a playlist…"
@@ -5807,7 +5807,7 @@ Item {
           keyNavigationEnabled: false
           highlightFollowsCurrentItem: true
           activeFocusOnTab: false
-          ScrollBar.vertical: ScrollBar { }
+          QQC.ScrollBar.vertical: QQC.ScrollBar { }
           Keys.onReturnPressed: function(event) {
             if (!root.cursorOn("page", "list")) {
               event.accepted = false
@@ -5892,11 +5892,11 @@ Item {
     id: devicesPage
 
     Item {
-      ScrollView {
+      QQC.ScrollView {
         id: devicesScroll
         anchors.fill: parent
         clip: true
-        ScrollBar.horizontal.policy: ScrollBar.AlwaysOff
+        QQC.ScrollBar.horizontal.policy: QQC.ScrollBar.AlwaysOff
 
         Column {
           width: devicesScroll.availableWidth
@@ -6086,11 +6086,11 @@ Item {
     id: loginPage
 
     Item {
-      ScrollView {
+      QQC.ScrollView {
         id: loginScroll
         anchors.fill: parent
         clip: true
-        ScrollBar.horizontal.policy: ScrollBar.AlwaysOff
+        QQC.ScrollBar.horizontal.policy: QQC.ScrollBar.AlwaysOff
 
         Column {
           width: Math.min(Style.space(620), loginScroll.availableWidth)
@@ -6322,11 +6322,11 @@ Item {
     id: setupPage
 
     Item {
-      ScrollView {
+      QQC.ScrollView {
         id: setupScroll
         anchors.fill: parent
         clip: true
-        ScrollBar.horizontal.policy: ScrollBar.AlwaysOff
+        QQC.ScrollBar.horizontal.policy: QQC.ScrollBar.AlwaysOff
 
         Column {
           width: setupScroll.availableWidth

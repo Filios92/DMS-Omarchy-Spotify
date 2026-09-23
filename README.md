@@ -18,6 +18,13 @@ omarchy plugin add https://github.com/stappmus/Omarchy-Spotify.git --enable
 
 Requires Omarchy 4 and a personal Spotify Premium account.
 
+## DMS proof of concept
+
+The checkout also contains an early Dank Material Shell port. It loads a small
+bar button that opens the existing player window and reuses the existing
+backend. See [the PoC setup and current limits](docs/MVP_PORT.md). Run
+`./scripts/test-dms-poc.sh` for its isolated QML and socket checks.
+
 ## Why you will love it
 
 - **Lightweight by design.** Enjoy your music without keeping a browser-sized

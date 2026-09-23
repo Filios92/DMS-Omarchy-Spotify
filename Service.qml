@@ -1,6 +1,5 @@
 import QtQuick
 import Quickshell
-import Quickshell.Hyprland
 import Quickshell.Io
 import Quickshell.Services.Mpris
 
@@ -19,11 +18,13 @@ Item {
   property var shell: null
   property var manifest: null
   property var pluginRegistry: null
+  property string sourceDir: ""
+  property bool automaticSetupEnabled: true
 
   readonly property string pluginId: manifest && manifest.id
     ? String(manifest.id) : "quickshell.spotify"
-  readonly property string pluginDir: manifest && manifest.__sourceDir
-    ? String(manifest.__sourceDir) : ""
+  readonly property string pluginDir: sourceDir || (manifest && manifest.__sourceDir
+    ? String(manifest.__sourceDir) : "")
   readonly property string homeDirectory: Quickshell.env("HOME") || ""
   readonly property string stateHome: {
     var explicit = String(Quickshell.env("XDG_STATE_HOME") || "").trim()
@@ -168,10 +169,16 @@ Item {
     && !!remoteDevice && remoteDevice.active === true
     && !remotePlaybackIsLocal
     && !(hasLocalPlayer && activePlayer.isPlaying)
+  // The socket snapshot is also useful before MPRIS has published a player.
+  // Keep MPRIS as the normal control surface once it becomes available.
+  readonly property var backendTrack: !useRemotePlayback && !hasLocalPlayer
+    && backendClient.connected && backendClient.lastState
+    ? backendClient.lastState.track : null
   readonly property bool hasPlayer: useRemotePlayback || hasLocalPlayer
   readonly property bool hasMedia: useRemotePlayback
     ? !!remoteTrack
-    : (hasLocalPlayer && !!(activePlayer.trackTitle || activePlayer.trackArtist))
+    : ((hasLocalPlayer && !!(activePlayer.trackTitle || activePlayer.trackArtist))
+      || !!backendTrack)
   readonly property bool playing: useRemotePlayback
     ? remotePlayback.playing === true
     : (hasLocalPlayer && activePlayer.isPlaying)
@@ -182,20 +189,26 @@ Item {
     : MprisPlaybackState.Stopped
   readonly property string title: useRemotePlayback && remoteTrack
     ? String(remoteTrack.name || "")
-    : (hasLocalPlayer ? String(activePlayer.trackTitle || "") : "")
+    : (hasLocalPlayer ? String(activePlayer.trackTitle || "")
+      : (backendTrack ? String(backendTrack.title || "") : ""))
   readonly property string artist: useRemotePlayback && remoteTrack
     ? String(remoteTrack.subtitle || "")
-    : (hasLocalPlayer ? String(activePlayer.trackArtist || "") : "")
+    : (hasLocalPlayer ? String(activePlayer.trackArtist || "")
+      : (backendTrack ? (backendTrack.artists || []).join(", ") : ""))
   readonly property string album: useRemotePlayback && remoteTrack
     ? String(remoteTrack.album || "")
-    : (hasLocalPlayer ? String(activePlayer.trackAlbum || "") : "")
+    : (hasLocalPlayer ? String(activePlayer.trackAlbum || "")
+      : (backendTrack ? String(backendTrack.album || "") : ""))
   readonly property string artUrl: useRemotePlayback && remoteTrack
     ? String(remoteTrack.imageUrl || "")
-    : (hasLocalPlayer ? String(activePlayer.trackArtUrl || "") : "")
+    : (hasLocalPlayer ? String(activePlayer.trackArtUrl || "")
+      : (backendTrack ? String(backendTrack.art_url || "") : ""))
   readonly property real positionSeconds: {
     playbackPositionTick
     if (!useRemotePlayback) return hasLocalPlayer && activePlayer.positionSupported
-      ? Math.max(0, Number(activePlayer.position) || 0) : 0
+      ? Math.max(0, Number(activePlayer.position) || 0)
+      : (backendTrack ? Math.max(0,
+        Number(backendClient.lastState.position_ms) || 0) / 1000 : 0)
     var value = Api.displayedRemotePosition(remotePlayback,
       pendingRemoteSeek, Date.now())
     var maximum = remoteTrack ? Math.max(0, Number(remoteTrack.durationMs) || 0) / 1000 : 0
@@ -204,7 +217,8 @@ Item {
   readonly property real lengthSeconds: useRemotePlayback && remoteTrack
     ? Math.max(0, Number(remoteTrack.durationMs) || 0) / 1000
     : (hasLocalPlayer && activePlayer.lengthSupported
-      ? Math.max(0, Number(activePlayer.length) || 0) : 0)
+      ? Math.max(0, Number(activePlayer.length) || 0)
+      : (backendTrack ? Math.max(0, Number(backendTrack.duration_ms) || 0) / 1000 : 0))
   readonly property real playbackVolume: useRemotePlayback && remoteDevice
     ? displayedRemoteVolumePercent(remoteDevice) / 100
     : (hasLocalPlayer && activePlayer.volumeSupported
@@ -230,7 +244,9 @@ Item {
   readonly property string repeatMode: useRemotePlayback
     ? String(remotePlayback.repeatMode || "off") : mprisRepeatMode()
   readonly property string currentUri: useRemotePlayback && remoteTrack
-    ? String(remoteTrack.uri || "") : metadataString("xesam:url")
+    ? String(remoteTrack.uri || "")
+    : (hasLocalPlayer ? metadataString("xesam:url")
+      : (backendTrack ? String(backendTrack.uri || "") : ""))
   readonly property string currentExternalUrl: useRemotePlayback && remoteTrack
     ? String(remoteTrack.externalUrl || spotifyWebUrl(currentUri)) : spotifyWebUrl(currentUri)
   readonly property string currentTrackId: {
@@ -2756,13 +2772,8 @@ Item {
     playerSurfaces = playerSurfaces.filter(function(item) { return item && item !== surface })
   }
   function shortcutSurface() {
-    var focused = Hyprland.focusedMonitor
-    for (var i = 0; i < playerSurfaces.length; i++) {
-      var surface = playerSurfaces[i]
-      var window = surface ? surface.QsWindow.window : null
-      if (window && window.screen && focused && window.screen.name === focused.name)
-        return surface
-    }
+    // The PoC has one full player surface; selecting it works on any Wayland
+    // compositor and does not require a Hyprland focused-monitor API.
     return playerSurfaces.length ? playerSurfaces[0] : null
   }
   function invokePlayerShortcut(method) {
@@ -4163,6 +4174,7 @@ Item {
   DaemonManager {
     id: daemonManager
     pluginDir: root.pluginDir
+    automaticSetupEnabled: root.automaticSetupEnabled
     deviceName: root.deviceName
     bitrateKbps: root.bitrateKbps
     mprisPresent: root.hasLocalPlayer

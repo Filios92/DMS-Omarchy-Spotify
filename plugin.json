@@ -1,0 +1,13 @@
+{
+  "id": "omarchySpotify",
+  "name": "Spotify",
+  "description": "Spotify player proof of concept for Dank Material Shell",
+  "version": "1.0.4",
+  "author": "QuickshellSpotify",
+  "license": "MIT",
+  "icon": "music_note",
+  "type": "widget",
+  "capabilities": ["dankbar-widget"],
+  "component": "./SpotifyDms.qml",
+  "permissions": ["process", "network"]
+}

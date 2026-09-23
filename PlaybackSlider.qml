@@ -1,5 +1,5 @@
 import QtQuick
-import qs.Ui
+import "compat/Ui"
 
 import "Api.js" as Api
 

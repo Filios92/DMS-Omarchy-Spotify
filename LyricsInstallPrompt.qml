@@ -1,6 +1,6 @@
 import QtQuick
-import qs.Commons
-import qs.Ui
+import "compat/Commons"
+import "compat/Ui"
 
 Item {
   id: root
