@@ -5,6 +5,12 @@ the existing backend's playback state. The full MVP in `MIGRATION.md` also
 requires login, playback controls, library/API flows, and restart recovery;
 those are not PoC acceptance criteria.
 
+The PoC compatibility layer now follows DMS's live Theme roles for text,
+accent, error, surfaces, fields, fonts, and corner radius. The player window
+uses DMS's floating-window surface, including its configured transparency.
+In-panel menus keep a nearly opaque background for legibility because they
+have no separate blur layer. The player layout and spacing remain unchanged.
+
 ## Incompatibility map
 
 | Dependency | Class | PoC treatment |

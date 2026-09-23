@@ -12,8 +12,9 @@ QQC.TextField {
   implicitHeight: 32
   background: Rectangle {
     radius: Style.cornerRadius
-    color: "#24272f"
-    border.color: parent.activeFocus || parent.hasCursor ? Color.accent : "#505562"
-    border.width: 1
+    color: Color.field
+    border.color: parent.activeFocus || parent.hasCursor
+      ? Color.fieldFocusedBorder : Color.fieldBorder
+    border.width: Style.normalBorderWidth
   }
 }

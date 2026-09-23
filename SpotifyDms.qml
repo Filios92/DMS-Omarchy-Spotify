@@ -3,9 +3,21 @@ import Quickshell
 import Quickshell.Io
 import qs.Common
 import qs.Modules.Plugins
+import "compat/Commons"
 
 PluginComponent {
   id: root
+
+  Binding {
+    target: Color
+    property: "theme"
+    value: Theme
+  }
+  Binding {
+    target: Style
+    property: "theme"
+    value: Theme
+  }
 
   // DMS keeps this component loaded while its bar widget is active. The
   // Rust backend has its own systemd lifecycle and outlives this window.
@@ -33,8 +45,8 @@ PluginComponent {
       Text {
         anchors.centerIn: parent
         text: "♫"
-        color: Theme.surfaceText
-        font.pixelSize: 22
+        color: Theme.widgetIconColor
+        font.pixelSize: Theme.iconSize
       }
     }
   }
@@ -59,7 +71,17 @@ PluginComponent {
         sourceDir: root.sourceDir,
         backendConnected: spotifyService.backend.connected,
         mprisPresent: spotifyService.hasLocalPlayer,
-        title: spotifyService.title
+        title: spotifyService.title,
+        appearance: {
+          dmsWindowColor: String(Theme.floatingWindowSurface),
+          playerWindowColor: String(Color.background),
+          dmsAccent: String(Theme.primary),
+          playerAccent: String(Color.accent),
+          adapterBound: !!Color.theme,
+          styleBound: !!Style.theme,
+          fontFamily: Style.font.family,
+          cornerRadius: Style.cornerRadius
+        }
       })
     }
   }

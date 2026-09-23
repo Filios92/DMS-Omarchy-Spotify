@@ -23,7 +23,7 @@ ShellRoot {
     }
   }
   Timer {
-    interval: 5000
+    interval: 8000
     running: true
     onTriggered: { throw new Error("Backend socket state was not received") }
   }
