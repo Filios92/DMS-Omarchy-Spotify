@@ -8,6 +8,9 @@ those are not PoC acceptance criteria.
 The PoC compatibility layer now follows DMS's live Theme roles for text,
 accent, error, surfaces, fields, fonts, and corner radius. The player window
 uses DMS's floating-window surface, including its configured transparency.
+When hosted by DMS, the player also attaches DMS's `WindowBlur` region to the
+full window. DMS enables that region only when its blur setting and compositor
+support are both active.
 In-panel menus keep a nearly opaque background for legibility because they
 have no separate blur layer. The player layout and spacing remain unchanged.
 

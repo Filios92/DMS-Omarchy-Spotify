@@ -12,6 +12,7 @@ Item {
   property var shell: null
   property var manifest: null
   property var service: null
+  property bool dmsHostEnabled: false
   property bool opened: false
   property bool closingFromHost: false
   property bool escapeCloseArmed: false
@@ -3048,6 +3049,12 @@ Item {
     implicitWidth: 980
     implicitHeight: 720
     minimumSize: Qt.size(700, 560)
+
+    Loader {
+      active: root.dmsHostEnabled && window.visible
+      source: "compat/Ui/DmsWindowBlur.qml"
+      onLoaded: item.targetWindow = window
+    }
 
     onVisibleChanged: {
       if (!visible && root.opened && !root.closingFromHost) root.requestClose()

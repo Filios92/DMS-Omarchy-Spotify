@@ -34,6 +34,7 @@ PluginComponent {
   Panel {
     id: spotifyPanel
     service: spotifyService
+    dmsHostEnabled: true
     manifest: ({ id: "omarchySpotify" })
   }
 
