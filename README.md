@@ -24,6 +24,8 @@ The checkout also contains an early Dank Material Shell port. It loads a small
 bar button that opens the existing player window and reuses the existing
 backend. See [the PoC setup and current limits](docs/MVP_PORT.md). Run
 `./scripts/test-dms-poc.sh` for its isolated QML and socket checks.
+To show the DMS player in Dank Launcher's Applications list, run
+`./scripts/install-dms-launcher.sh` after enabling the plugin.
 
 ## Why you will love it
 

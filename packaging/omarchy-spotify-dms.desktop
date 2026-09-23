@@ -1,0 +1,12 @@
+[Desktop Entry]
+Type=Application
+Name=Spotify
+GenericName=Spotify player (DMS)
+Comment=Open the Spotify player in Dank Material Shell
+Exec=dms ipc call spotifyPoc open
+TryExec=dms
+Icon=multimedia-player
+Terminal=false
+StartupNotify=false
+Categories=AudioVideo;Audio;Player;
+Keywords=Spotify;Music;DMS;

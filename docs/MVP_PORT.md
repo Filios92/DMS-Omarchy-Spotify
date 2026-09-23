@@ -28,6 +28,12 @@ Settings → Plugins, and add its Spotify widget to DankBar. Click the music
 button to open the existing player. Closing the window leaves the independent
 backend user service running.
 
+To list the player under Applications in Dank Launcher, run
+`./scripts/install-dms-launcher.sh` from this checkout. This installs a user
+desktop entry named **Spotify**; it opens the same DMS player through IPC and
+requires DMS and the `omarchySpotify` plugin to be running. It does not install
+or start the backend. Reopening Dank Launcher refreshes the application list.
+
 The same window can be driven with `dms ipc call spotifyPoc open` and
 `dms ipc call spotifyPoc close`. `dms ipc call spotifyPoc status` reports only
 window, plugin-path, backend-connection, MPRIS, and track-title status.
