@@ -3051,9 +3051,15 @@ Item {
     minimumSize: Qt.size(700, 560)
 
     Loader {
+      id: dmsWindowBlur
       active: root.dmsHostEnabled && window.visible
-      source: "compat/Ui/DmsWindowBlur.qml"
-      onLoaded: item.targetWindow = window
+      function loadBlurComponent() {
+        if (active && status === Loader.Null)
+          setSource(Qt.resolvedUrl("compat/Ui/DmsWindowBlur.qml"),
+            { targetWindow: window })
+      }
+      Component.onCompleted: loadBlurComponent()
+      onActiveChanged: loadBlurComponent()
     }
 
     onVisibleChanged: {
