@@ -10,13 +10,13 @@ Rectangle {
   y: parent ? -height - 4 : 0
   z: 50
   radius: Style.cornerRadius
-  color: Color.popups.background
-  border.color: Color.popups.border
+  color: SpotifyColors.popups.background
+  border.color: SpotifyColors.popups.border
   Text {
     id: label
     anchors.centerIn: parent
     text: parent.text
-    color: Color.foreground
+    color: SpotifyColors.foreground
     font.family: Style.font.family
     font.pixelSize: Style.font.bodySmall
   }

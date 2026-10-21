@@ -4,7 +4,7 @@ import "../Commons"
 
 QQC.TextField {
   // TODO: Replace this color facade with a themed DMS field.
-  property color foreground: Color.foreground
+  property color foreground: SpotifyColors.foreground
   property bool hasCursor: false
   color: foreground
   font.family: Style.font.family
@@ -12,9 +12,9 @@ QQC.TextField {
   implicitHeight: 32
   background: Rectangle {
     radius: Style.cornerRadius
-    color: Color.field
+    color: SpotifyColors.field
     border.color: parent.activeFocus || parent.hasCursor
-      ? Color.fieldFocusedBorder : Color.fieldBorder
+      ? SpotifyColors.fieldFocusedBorder : SpotifyColors.fieldBorder
     border.width: Style.normalBorderWidth
   }
 }

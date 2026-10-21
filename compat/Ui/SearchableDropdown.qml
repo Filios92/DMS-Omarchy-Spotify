@@ -6,9 +6,9 @@ QQC.ComboBox {
   id: root
   // TODO: Restore searchable selection when migrating settings UI.
   property bool showLabel: true
-  property color foreground: Color.foreground
-  property color surfaceColor: Color.background
-  property color accent: Color.accent
+  property color foreground: SpotifyColors.foreground
+  property color surfaceColor: SpotifyColors.background
+  property color accent: SpotifyColors.accent
   property string fontFamily: Style.font.family
   property string placeholderText: ""
   property string emptyText: ""

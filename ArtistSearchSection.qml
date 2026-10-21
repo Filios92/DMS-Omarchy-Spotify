@@ -43,7 +43,7 @@ Column {
     Text {
       width: Math.max(40, parent.width - resultStatus.width - parent.spacing)
       text: root.heading
-      color: Color.foreground
+      color: SpotifyColors.foreground
       font.family: Style.font.family
       font.pixelSize: Style.font.caption
       font.bold: true
@@ -54,7 +54,7 @@ Column {
       id: resultStatus
       text: root.loading && root.resultCount === 0
         ? "Finding…" : String(root.resultCount)
-      color: Color.muted
+      color: SpotifyColors.muted
       font.family: Style.font.family
       font.pixelSize: Style.font.caption
     }
@@ -84,8 +84,8 @@ Column {
         anchors.fill: parent
         anchors.margins: Style.space(2)
         itemData: resultCell.modelData
-        foreground: Color.foreground
-        accent: Color.accent
+        foreground: SpotifyColors.foreground
+        accent: SpotifyColors.accent
         fontFamily: Style.font.family
         browseOnActivate: root.browseContexts && modelData.kind === "context"
         showQueue: root.showQueue
@@ -115,7 +115,7 @@ Column {
     height: visible ? implicitHeight : 0
     visible: root.loading || root.hasMore
     text: root.loading ? "Loading…" : "Load more"
-    foreground: Color.foreground
+    foreground: SpotifyColors.foreground
     enabled: root.hasMore && !root.loading
     onClicked: root.loadMoreRequested()
   }

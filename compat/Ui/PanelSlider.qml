@@ -23,7 +23,7 @@ Item {
     anchors.verticalCenter: parent.verticalCenter
     height: 4
     radius: 2
-    color: Color.muted
+    color: SpotifyColors.muted
   }
   Rectangle {
     anchors.left: parent.left
@@ -32,7 +32,7 @@ Item {
       (root.value - root.minimum) / Math.max(0.000001, root.maximum - root.minimum)))
     height: 4
     radius: 2
-    color: Color.accent
+    color: SpotifyColors.accent
   }
   Rectangle {
     x: Math.max(0, Math.min(parent.width - width,
@@ -42,7 +42,7 @@ Item {
     width: 12
     height: 12
     radius: 6
-    color: Color.foreground
+    color: SpotifyColors.foreground
   }
   MouseArea {
     id: hit

@@ -6,9 +6,9 @@ Item {
   id: root
 
   property var service: null
-  property color foreground: Color.foreground
-  property color muted: Color.muted
-  property color urgent: Color.urgent
+  property color foreground: SpotifyColors.foreground
+  property color muted: SpotifyColors.muted
+  property color urgent: SpotifyColors.urgent
   property string surfaceKey: ""
   property bool cancelHasCursor: false
   property bool confirmHasCursor: false

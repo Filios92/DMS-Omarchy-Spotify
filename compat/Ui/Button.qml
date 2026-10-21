@@ -11,8 +11,8 @@ Item {
   property string fontFamily: Style.font.family
   property real fontSize: Style.font.body
   property real iconSize: Style.font.icon
-  property color foreground: Color.foreground
-  property color accent: Color.accent
+  property color foreground: SpotifyColors.foreground
+  property color accent: SpotifyColors.accent
   property bool selected: false
   property bool bordered: false
   property bool leftAlign: false

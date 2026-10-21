@@ -8,9 +8,9 @@ BorderSurface {
   id: root
 
   required property var itemData
-  property color foreground: Color.foreground
-  property color accent: Color.accent
-  property color muted: Color.muted
+  property color foreground: SpotifyColors.foreground
+  property color accent: SpotifyColors.accent
+  property color muted: SpotifyColors.muted
   property string fontFamily: Style.font.family
   property bool selected: false
   property bool showPlay: true
@@ -267,8 +267,8 @@ BorderSurface {
         objectName: "media-row-save"
         visible: root.saveActionVisible
         iconText: "󰋑"
-        foreground: Color.urgent
-        accent: Color.urgent
+        foreground: SpotifyColors.urgent
+        accent: SpotifyColors.urgent
         tooltipText: "Save to library"
         horizontalPadding: Style.space(7)
         onClicked: root.saveRequested(root.itemData)

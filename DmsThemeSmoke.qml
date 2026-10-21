@@ -30,7 +30,7 @@ ShellRoot {
   Panel { id: panel }
 
   Component.onCompleted: {
-    Color.theme = fakeTheme
+    SpotifyColors.theme = fakeTheme
     Style.theme = fakeTheme
     fakeTheme.floatingWindowSurface = "#66445566"
     fakeTheme.primary = "#ee7733"
@@ -46,17 +46,21 @@ ShellRoot {
     id: check
     interval: 100
     onTriggered: {
-      if (Math.abs(Color.background.a - 0.4) > 0.01
+      if (Math.abs(SpotifyColors.background.a - 0.4) > 0.01
           || Math.abs(panel.background.a - 0.4) > 0.01
-          || Color.accent.r < 0.9 || Color.accent.g < 0.4
-          || Color.foreground.r > 0.1
-          || Style.normalFillFor(Color.foreground, Color.accent).r > 0.1
-          || Color.popups.background.r < 0.8
+          || SpotifyColors.accent.r < 0.9 || SpotifyColors.accent.g < 0.4
+          || SpotifyColors.foreground.r > 0.1
+          || Style.normalFillFor(SpotifyColors.foreground, SpotifyColors.accent).r > 0.1
+          || SpotifyColors.popups.background.r < 0.8
           || Style.font.family !== "Changed Theme"
           || panel.fontFamily !== "Changed Theme"
           || Style.font.body !== 19 || Style.cornerRadius !== 14)
         throw new Error("DMS theme values did not reach the player")
       console.log("DMS_THEME_SMOKE_PASS")
+      // Release the test object before Qt tears it down. Singletons outlive
+      // the shell and Qt 6.12 reevaluates their bindings during destruction.
+      SpotifyColors.theme = null
+      Style.theme = null
       Qt.quit()
     }
   }

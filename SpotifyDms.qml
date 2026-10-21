@@ -9,7 +9,7 @@ PluginComponent {
   id: root
 
   Binding {
-    target: Color
+    target: SpotifyColors
     property: "theme"
     value: Theme
   }
@@ -75,10 +75,10 @@ PluginComponent {
         title: spotifyService.title,
         appearance: {
           dmsWindowColor: String(Theme.floatingWindowSurface),
-          playerWindowColor: String(Color.background),
+          playerWindowColor: String(SpotifyColors.background),
           dmsAccent: String(Theme.primary),
-          playerAccent: String(Color.accent),
-          adapterBound: !!Color.theme,
+          playerAccent: String(SpotifyColors.accent),
+          adapterBound: !!SpotifyColors.theme,
           styleBound: !!Style.theme,
           fontFamily: Style.font.family,
           cornerRadius: Style.cornerRadius

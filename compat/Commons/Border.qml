@@ -6,7 +6,7 @@ QtObject {
   function none() { return { color: "transparent", width: 0 } }
   function flat(color, width) { return { color: color, width: width } }
   function controlSpec(state, foreground, accent) {
-    var outline = Color.outline
+    var outline = SpotifyColors.outline
     return state === "selected" ? none() : flat(
       Qt.rgba(outline.r, outline.g, outline.b, Style.normalBorderAlpha),
       Style.normalBorderWidth)

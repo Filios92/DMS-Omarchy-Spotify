@@ -1,3 +1,4 @@
-singleton Color 1.0 Color.qml
+# Use a distinct name: QtQuick exports Color starting with Qt 6.12.
+singleton SpotifyColors 1.0 SpotifyColors.qml
 singleton Style 1.0 Style.qml
 singleton Border 1.0 Border.qml

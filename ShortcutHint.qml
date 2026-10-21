@@ -16,9 +16,9 @@ Item {
   property bool active: false
   property string navHint: ""
   property bool showWash: true
-  property color foreground: Color.foreground
-  property color accent: Color.accent
-  property color hintColor: Color.urgent
+  property color foreground: SpotifyColors.foreground
+  property color accent: SpotifyColors.accent
+  property color hintColor: SpotifyColors.urgent
   readonly property color washColor: Qt.rgba(hintColor.r, hintColor.g,
     hintColor.b, Style.hoverFillAlpha)
   readonly property color washBorder: Qt.rgba(hintColor.r, hintColor.g,
