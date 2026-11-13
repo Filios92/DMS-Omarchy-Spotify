@@ -26,9 +26,16 @@ PluginComponent {
 
   Service {
     id: spotifyService
+    shell: dmsSettings
     sourceDir: root.sourceDir
     automaticSetupEnabled: false
     manifest: ({ id: "omarchySpotify" })
+  }
+
+  DmsSettings {
+    id: dmsSettings
+    pluginService: root.pluginService
+    pluginData: root.pluginData
   }
 
   Panel {
@@ -73,6 +80,8 @@ PluginComponent {
         backendConnected: spotifyService.backend.connected,
         mprisPresent: spotifyService.hasLocalPlayer,
         title: spotifyService.title,
+        customClientId: String(spotifyService.settings.clientId || ""),
+        resolvedClientId: spotifyService.auth.resolvedClientId,
         appearance: {
           dmsWindowColor: String(Theme.floatingWindowSurface),
           playerWindowColor: String(SpotifyColors.background),
