@@ -6,6 +6,37 @@ import "../Api.js" as Api
 TestCase {
   name: "SpotifyApiLogic"
 
+  function test_playbackSourceContext_data() {
+    return [
+      { tag: "playlist", uri: "spotify:playlist:abc123", type: "playlist", id: "abc123" },
+      { tag: "album", uri: "spotify:album:abc123", type: "album", id: "abc123" },
+      { tag: "artist", uri: "spotify:artist:abc123", type: "artist", id: "abc123" },
+      { tag: "radio playlist", uri: "spotify:playlist:radio123", type: "playlist", id: "radio123" },
+      { tag: "legacy playlist", uri: "spotify:user:owner:playlist:abc123", type: "playlist", id: "abc123" },
+      { tag: "liked songs", uri: "spotify:user:owner:collection", type: "collection" },
+      { tag: "podcast", uri: "spotify:show:abc123", type: "show", id: "abc123" },
+      { tag: "no source", uri: "", type: "" },
+      { tag: "unsupported source", uri: "spotify:station:track:abc123", type: "" }
+    ]
+  }
+
+  function test_playbackSourceContext(data) {
+    var result = Api.playbackSourceContext({
+      item: { uri: "spotify:track:song123" }, contextUri: data.uri
+    }, "spotify:track:song123")
+    if (!data.type) { compare(result, null); return }
+    compare(result.kind, "context")
+    compare(result.type, data.type)
+    if (data.id) compare(result.id, data.id)
+  }
+
+  function test_playbackSourceContext_rejectsStaleSnapshots() {
+    var state = { item: { uri: "spotify:track:old" }, contextUri: "spotify:playlist:old" }
+    compare(Api.playbackSourceContext(state, "spotify:track:new"), null)
+    compare(Api.playbackSourceContext(state, ""), null)
+    compare(Api.playbackSourceContext(null, "spotify:track:new"), null)
+  }
+
   function test_queryString_isStableAndEncoded() {
     compare(Api.queryString({ z: "last", q: "AC/DC & friends", empty: "" }),
       "q=AC%2FDC%20%26%20friends&z=last")

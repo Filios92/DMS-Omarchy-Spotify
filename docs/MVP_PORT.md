@@ -52,6 +52,12 @@ Player preferences, including the optional personal Spotify client ID, are
 saved under `omarchySpotify.playerSettings` in DMS's `plugin_settings.json`.
 Refresh tokens remain in the keyring, scoped to the selected client ID.
 
+Click the song title in the bottom player to open its current playback source
+(playlist, album, artist, or radio playlist). Liked Songs opens the track library.
+If Spotify does not expose a browsable source, this opens the song's album or
+artist instead, falling back to Queue when metadata is unavailable. The title
+can also be selected with keyboard navigation and activated with Enter.
+
 Backend setup remains explicit for this PoC. If no backend is installed, run
 `./scripts/setup.sh` from the checkout, then authorize local playback using
 the existing player setup flow. The DMS component disables automatic backend

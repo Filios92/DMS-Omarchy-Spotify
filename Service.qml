@@ -2349,6 +2349,36 @@ Item {
     else detailRestoreTargetCount = 0
   }
 
+  function currentPlaybackSource(callback) {
+    if (typeof callback !== "function" || !currentTrackItem) return
+    var itemUri = currentTrackItem.uri
+    function finish(item) {
+      if (root.currentTrackItem && root.currentTrackItem.uri === itemUri)
+        callback(item)
+    }
+    // Playback may have moved to another context or device since the last poll.
+    loadPlaybackState(function() {
+      if (!root.currentTrackItem || root.currentTrackItem.uri !== itemUri) return
+      var source = Api.playbackSourceContext(root.remotePlayback, itemUri)
+      if (source) {
+        if (source.type === "playlist") {
+          var cached = root.playlistById(source.id)
+          if (root.lastRadioPlaylist && root.lastRadioPlaylist.id === source.id)
+            cached = root.lastRadioPlaylist
+          if (cached) source = cached
+        }
+        finish(source)
+      } else if (root.currentTrackItem.parentContext) {
+        finish(root.currentTrackItem.parentContext)
+      } else if (root.currentAlbumContextAvailable) {
+        root.currentContext("album", finish)
+      } else if (root.currentArtistContextAvailable
+          && (root.artist !== "" || root.currentArtists.length > 0)) {
+        root.currentContext("artist", finish)
+      } else finish(null)
+    })
+  }
+
   function currentContext(kind, callback) {
     if (typeof callback !== "function") return
     if (kind === "artist" && currentArtists.length) {

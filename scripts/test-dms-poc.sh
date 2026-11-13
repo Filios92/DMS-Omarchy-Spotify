@@ -6,6 +6,19 @@ test_root=$(mktemp -d /tmp/omarchy-spotify-dms-smoke.XXXXXX)
 trap 'if [[ -n ${mock_server:-} ]]; then kill "$mock_server" 2>/dev/null || true; fi; rm -rf -- "$test_root"' EXIT
 mkdir -m 700 "$test_root/runtime"
 
+dbus-run-session -- env -u WAYLAND_DISPLAY XDG_RUNTIME_DIR="$test_root/runtime" \
+  XDG_STATE_HOME="$test_root/state" QT_QPA_PLATFORM=offscreen \
+  timeout 10s qs --no-color -p "$source_root/DmsSourceSmoke.qml" \
+  >"$test_root/source-output" 2>&1 || {
+    cat "$test_root/source-output"
+    exit 1
+  }
+if ! rg -q DMS_SOURCE_SMOKE_PASS "$test_root/source-output" \
+  || rg -i 'Error:|ReferenceError|TypeError|binding loop|Cannot assign|Unable to assign|Failed to load configuration' "$test_root/source-output"; then
+  cat "$test_root/source-output"
+  exit 1
+fi
+
 printf '%s\n' '{"enabled":true,"unrelated":"kept"}' > "$test_root/settings.json"
 for phase in write read clear default; do
   dbus-run-session -- env -u WAYLAND_DISPLAY XDG_RUNTIME_DIR="$test_root/runtime" \
@@ -74,4 +87,4 @@ if ! rg -q DMS_BACKEND_SMOKE_PASS "$test_root/backend-output"; then
   sed -n '1,180p' "$test_root/backend-output"
   exit 1
 fi
-echo 'DMS settings persistence, panel, live theme binding, and backend socket smoke passed.'
+echo 'DMS playback source, settings persistence, panel, live theme binding, and backend socket smoke passed.'

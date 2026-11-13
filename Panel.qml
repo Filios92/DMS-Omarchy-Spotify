@@ -589,6 +589,18 @@ Item {
     syncUnifiedSearchField()
   }
 
+  function openPlaybackSource() {
+    if (!service || !accountConnected) return
+    service.currentPlaybackSource(function(item) {
+      if (!root.accountConnected) return
+      if (!item) { root.chooseTab("queue"); return }
+      if (item.type === "collection") {
+        root.libraryType = "tracks"
+        root.chooseTab("library")
+      } else root.openItem(item)
+    })
+  }
+
   function openCurrentArtist() {
     if (!service || !service.currentArtistContextAvailable) return
     service.currentContext("artist", function(item) { openItem(item) })
@@ -992,6 +1004,7 @@ Item {
   function footerCursorActions() {
     if (currentTab === "login") return []
     var actions = []
+    if (accountConnected && service && service.currentTrackItem) actions.push("source")
     if (service && service.currentTrackSaveAvailable) actions.push("like")
     if (service && service.currentTrackItem) actions.push("context")
     if (service && service.currentArtistContextAvailable) actions.push("artist")
@@ -1258,6 +1271,7 @@ Item {
     else if (action === "close") requestClose()
     else if (action === "like" && service) service.toggleCurrentTrackSaved()
     else if (action === "context") openNowPlayingContext()
+    else if (action === "source") openPlaybackSource()
     else if (action === "artist") openCurrentArtist()
     else if (action === "album") openCurrentAlbum()
     else if (action === "shuffle" && service)
@@ -4111,21 +4125,44 @@ Item {
                   width: parent.width
                   spacing: Style.space(3)
 
-                  Text {
+                  CursorSurface {
                     width: Math.max(20, parent.width
                       - (nowPlayingActions.visible
                         ? nowPlayingActions.width + parent.spacing : 0))
                     anchors.verticalCenter: parent.verticalCenter
-                    text: Api.idleMediaText(
-                      root.service ? root.service.title : "",
-                      root.service ? root.service.lastPlayedItem : null, "name",
-                      "Nothing playing")
-                    color: root.service && root.service.title
-                      ? root.foreground : root.muted
-                    font.family: root.fontFamily
-                    font.pixelSize: Style.font.body
-                    font.bold: true
-                    elide: Text.ElideRight
+                    height: currentTrackTitle.implicitHeight
+                    hasCursor: root.cursorOn("footer", "source")
+                    foreground: root.foreground
+
+                    Text {
+                      id: currentTrackTitle
+                      width: parent.width
+                      text: Api.idleMediaText(
+                        root.service ? root.service.title : "",
+                        root.service ? root.service.lastPlayedItem : null, "name",
+                        "Nothing playing")
+                      color: root.service && root.service.title
+                        ? root.foreground : root.muted
+                      font.family: root.fontFamily
+                      font.pixelSize: Style.font.body
+                      font.bold: true
+                      elide: Text.ElideRight
+                    }
+
+                    MouseArea {
+                      id: playbackSourceMouse
+                      anchors.fill: parent
+                      enabled: root.accountConnected && root.service
+                        && !!root.service.currentTrackItem
+                      hoverEnabled: true
+                      cursorShape: Qt.PointingHandCursor
+                      onEntered: root.setPanelCursor("footer", "source")
+                      onClicked: root.openPlaybackSource()
+                    }
+                    PanelToolTip {
+                      visible: playbackSourceMouse.containsMouse
+                      text: "Open playback source · album or artist if unavailable"
+                    }
                   }
 
                   Row {

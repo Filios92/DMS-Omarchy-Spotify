@@ -884,6 +884,27 @@ function normalizePlaybackState(value, imageWidth) {
   }
 }
 
+// MPRIS can advance before the Web API snapshot. Never use the previous item's
+// source when resolving the item currently displayed in the player.
+function playbackSourceContext(state, itemUri) {
+  if (!state || !state.item || !itemUri
+      || String(state.item.uri || "") !== String(itemUri)) return null
+  var uri = String(state.contextUri || "")
+  if (/^spotify:(user:[^:]+:)?collection$/.test(uri))
+    return { kind: "context", type: "collection", uri: uri }
+  var match = /^spotify:(album|artist|playlist|show|audiobook):([a-zA-Z0-9]+)$/.exec(uri)
+  if (!match) {
+    var legacy = /^spotify:user:[^:]+:playlist:([a-zA-Z0-9]+)$/.exec(uri)
+    if (legacy) match = [uri, "playlist", legacy[1]]
+  }
+  if (!match) return null
+  return normalizeContext({
+    type: match[1], id: match[2],
+    uri: "spotify:" + match[1] + ":" + match[2],
+    name: "Currently playing " + match[1]
+  })
+}
+
 function imageFor(images, targetWidth) {
   if (!Array.isArray(images) || images.length === 0) return ""
   var target = Math.max(1, Number(targetWidth) || 128)
